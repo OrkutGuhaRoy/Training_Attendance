@@ -19,40 +19,138 @@ st.set_page_config(page_title="KGR Training Portal", page_icon="🎓", layout="c
 # ── Dark gold theme ──────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap');
 
-html, body, [class*="css"] { font-family: 'Inter', sans-serif; background: #0d1117 !important; color: #e6edf3; }
-.main .block-container { max-width: 860px; padding: 2rem 1.5rem; }
+/* Base */
+html, body, [class*="css"] {
+  font-family: 'Inter', sans-serif;
+  background: #0d1117 !important;
+  color: #f0f6fc !important;
+  font-size: 16px !important;
+}
+.main .block-container { max-width: 900px; padding: 2rem 1.8rem; }
 #MainMenu, footer, header { visibility: hidden; }
-h1, h2, h3 { font-family: 'Playfair Display', serif; color: #d4a843; }
 
-.card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 1.4rem 1.6rem; margin-bottom: 1rem; }
-.card-gold { border-top: 3px solid #d4a843; }
+/* Headings */
+h1, h2, h3 { font-family: 'Playfair Display', serif; color: #f0c040 !important; }
 
-.label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: #484f58; margin-bottom: 2px; }
-.value { font-size: 1rem; font-weight: 600; color: #e6edf3; }
-.value-gold { color: #d4a843; }
-.value-green { color: #3fb950; }
-.value-red { color: #f85149; }
+/* Cards */
+.card {
+  background: #1c2230;
+  border: 1px solid #3a4150;
+  border-radius: 12px;
+  padding: 1.5rem 1.8rem;
+  margin-bottom: 1.1rem;
+}
+.card-gold { border-top: 3px solid #f0c040; }
 
-.row { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid #21262d; }
+/* Info rows inside cards */
+.label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #8b9ab0;
+  margin-bottom: 3px;
+}
+.value {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #f0f6fc;
+}
+.value-gold  { color: #f0c040; }
+.value-green { color: #4cc76e; }
+.value-red   { color: #ff6b6b; }
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid #2a3140;
+  gap: 1rem;
+}
 .row:last-child { border-bottom: none; }
+.row .label { min-width: 160px; margin-bottom: 0; }
 
+/* Streamlit inputs */
+.stTextInput > div > div > input,
+.stTextArea textarea,
+.stSelectbox > div > div {
+  background: #1c2230 !important;
+  border: 1px solid #3a4150 !important;
+  color: #f0f6fc !important;
+  border-radius: 8px !important;
+  font-size: 1rem !important;
+}
+.stTextInput > div > div > input:focus,
+.stTextArea textarea:focus {
+  border-color: #f0c040 !important;
+  box-shadow: 0 0 0 2px rgba(240,192,64,0.15) !important;
+}
+
+/* Labels on inputs */
+label, p, .stMarkdown p {
+  color: #c9d5e0 !important;
+  font-size: 0.95rem !important;
+}
+
+/* Buttons */
 .stButton > button {
-  background: linear-gradient(135deg, #d4a843, #8a6e2a) !important;
-  color: #0d1117 !important; font-weight: 700 !important;
-  border: none !important; border-radius: 8px !important; width: 100%;
+  background: linear-gradient(135deg, #f0c040, #b8902a) !important;
+  color: #0d1117 !important;
+  font-weight: 700 !important;
+  font-size: 1rem !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 0.55rem 1.5rem !important;
+  width: 100%;
 }
-.stTextInput > div > div > input, .stTextArea textarea {
-  background: #1c2230 !important; border: 1px solid #30363d !important;
-  color: #e6edf3 !important; border-radius: 8px !important;
+.stButton > button:hover { opacity: 0.9 !important; }
+
+/* Tabs */
+.stTabs [data-baseweb="tab-list"] {
+  background: #1c2230 !important;
+  border: 1px solid #3a4150 !important;
+  border-radius: 10px !important;
+  padding: 4px !important;
+  gap: 4px;
 }
-label, .stMarkdown p { color: #8b949e !important; }
-.stTabs [data-baseweb="tab-list"] { background: #161b22 !important; border: 1px solid #30363d !important; border-radius: 10px !important; padding: 3px !important; }
-.stTabs [data-baseweb="tab"] { background: transparent !important; color: #8b949e !important; border-radius: 7px !important; }
-.stTabs [aria-selected="true"] { background: #d4a843 !important; color: #0d1117 !important; font-weight: 700 !important; }
-.stSuccess { background: rgba(63,185,80,0.1) !important; border: 1px solid rgba(63,185,80,0.3) !important; }
-.stError   { background: rgba(248,81,73,0.1) !important; border: 1px solid rgba(248,81,73,0.3) !important; }
+.stTabs [data-baseweb="tab"] {
+  background: transparent !important;
+  color: #8b9ab0 !important;
+  border-radius: 7px !important;
+  font-size: 0.95rem !important;
+  font-weight: 500 !important;
+  padding: 0.4rem 1.1rem !important;
+}
+.stTabs [aria-selected="true"] {
+  background: #f0c040 !important;
+  color: #0d1117 !important;
+  font-weight: 700 !important;
+}
+
+/* Alerts */
+.stSuccess { background: rgba(76,199,110,0.12) !important; border: 1px solid rgba(76,199,110,0.4) !important; color: #4cc76e !important; }
+.stError   { background: rgba(255,107,107,0.12) !important; border: 1px solid rgba(255,107,107,0.4) !important; color: #ff6b6b !important; }
+.stInfo    { background: rgba(88,166,255,0.1)  !important; border: 1px solid rgba(88,166,255,0.3)  !important; }
+
+/* Metrics */
+[data-testid="metric-container"] {
+  background: #1c2230;
+  border: 1px solid #3a4150;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+}
+[data-testid="metric-container"] label { color: #8b9ab0 !important; font-size: 0.85rem !important; }
+[data-testid="metric-container"] [data-testid="metric-value"] { color: #f0f6fc !important; font-size: 1.6rem !important; font-weight: 700 !important; }
+
+/* Dataframe */
+.stDataFrame { border: 1px solid #3a4150 !important; border-radius: 10px !important; overflow: hidden; }
+[data-testid="stDataFrameResizable"] th { background: #252d3d !important; color: #c9d5e0 !important; font-size: 0.85rem !important; }
+[data-testid="stDataFrameResizable"] td { color: #f0f6fc !important; font-size: 0.92rem !important; }
+
+/* Slider */
+.stSlider label { color: #c9d5e0 !important; font-size: 0.95rem !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -128,7 +226,7 @@ if not st.session_state.logged_in:
     <div style="text-align:center;padding:2rem 0 1.5rem">
       <div style="font-size:3rem">🎓</div>
       <h1 style="margin:0.3rem 0 0.1rem">KGR Training Portal</h1>
-      <p style="color:#484f58;font-size:0.8rem;letter-spacing:1.5px;text-transform:uppercase">
+      <p style="color:#8b9ab0;font-size:0.9rem;letter-spacing:1.5px;text-transform:uppercase">
         eTendering · DSC · Taxation · IT Skills
       </p>
     </div>
@@ -139,13 +237,13 @@ if not st.session_state.logged_in:
       <div style="display:flex;gap:1rem;align-items:center;">
         <div style="font-size:2.5rem">👩‍⚖️</div>
         <div>
-          <div style="font-family:'Playfair Display',serif;color:#d4a843;font-size:1.05rem;font-weight:700">
+          <div style="font-family:'Playfair Display',serif;color:#f0c040;font-size:1.05rem;font-weight:700">
             Ms Kavita Guha Roy
           </div>
-          <div style="font-size:0.72rem;color:#484f58;text-transform:uppercase;letter-spacing:1px;margin-bottom:0.4rem">
+          <div style="font-size:0.82rem;color:#8b9ab0;text-transform:uppercase;letter-spacing:1px;margin-bottom:0.4rem">
             Advocate & Technical Consultant · Head Instructor
           </div>
-          <div style="font-size:0.85rem;color:#8b949e;font-style:italic">
+          <div style="font-size:0.95rem;color:#c9d5e0;font-style:italic">
             "Welcome! These skills will open real doors for you.
             Give your best every session — we are here to guide you."
           </div>
@@ -182,7 +280,7 @@ if not st.session_state.logged_in:
                 st.error(f"Could not load data: {e}")
 
     st.markdown("""
-    <div style="text-align:center;margin-top:2rem;color:#484f58;font-size:0.75rem;">
+    <div style="text-align:center;margin-top:2rem;color:#8b9ab0;font-size:0.95rem;">
       Training by Ms Kavita Guha Roy & her team · Happy Learning!
     </div>
     """, unsafe_allow_html=True)
@@ -218,11 +316,11 @@ else:
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;">
         <div>
           <h2 style="margin:0">Welcome, {g('Name').split()[0]}! 👋</h2>
-          <p style="margin:0.2rem 0 0;color:#8b949e;font-size:0.88rem">Happy Learning! · {g('Training_Plan')}</p>
+          <p style="margin:0.2rem 0 0;color:#c9d5e0;font-size:0.95rem">Happy Learning! · {g('Training_Plan')}</p>
         </div>
         <div style="text-align:right;">
-          <div style="color:#d4a843;font-weight:700">{datetime.now().strftime('%d %b %Y')}</div>
-          <div style="color:#484f58;font-size:0.8rem">{datetime.now().strftime('%A')}</div>
+          <div style="color:#f0c040;font-weight:700">{datetime.now().strftime('%d %b %Y')}</div>
+          <div style="color:#8b9ab0;font-size:0.9rem">{datetime.now().strftime('%A')}</div>
         </div>
       </div>
     </div>
@@ -231,13 +329,13 @@ else:
     # ── Instructor card ──
     st.markdown("""
     <div class="card" style="border-left:4px solid #d4a843;">
-      <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1.5px;color:#484f58;margin-bottom:0.4rem">From the Head Instructor's Desk</div>
+      <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1.5px;color:#8b9ab0;margin-bottom:0.4rem">From the Head Instructor's Desk</div>
       <div style="display:flex;gap:1rem;align-items:center;">
         <div style="font-size:2.2rem">👩‍⚖️</div>
         <div>
-          <div style="font-family:'Playfair Display',serif;color:#d4a843;font-weight:700">Ms Kavita Guha Roy</div>
-          <div style="font-size:0.72rem;color:#484f58;text-transform:uppercase;letter-spacing:1px;margin-bottom:0.3rem">Advocate & Technical Consultant</div>
-          <div style="font-size:0.83rem;color:#8b949e;font-style:italic">"Consistency is the key. Show up, stay curious, and you will excel."</div>
+          <div style="font-family:'Playfair Display',serif;color:#f0c040;font-weight:700">Ms Kavita Guha Roy</div>
+          <div style="font-size:0.82rem;color:#8b9ab0;text-transform:uppercase;letter-spacing:1px;margin-bottom:0.3rem">Advocate & Technical Consultant</div>
+          <div style="font-size:0.92rem;color:#c9d5e0;font-style:italic">"Consistency is the key. Show up, stay curious, and you will excel."</div>
         </div>
       </div>
     </div>
@@ -250,14 +348,14 @@ else:
         col1, col2 = st.columns(2)
         with col1:
             st.markdown('<div class="card">', unsafe_allow_html=True)
-            st.markdown('<div style="font-family:\'Playfair Display\',serif;color:#d4a843;margin-bottom:0.8rem">Personal Details</div>', unsafe_allow_html=True)
+            st.markdown('<div style="font-family:\'Playfair Display\',serif;color:#f0c040;margin-bottom:0.8rem">Personal Details</div>', unsafe_allow_html=True)
             for lbl, val in [("Full Name", g("Name")), ("Email", g("Email")), ("Phone", g("Phone")), ("Batch", g("Batch"))]:
                 st.markdown(f'<div class="row"><div class="label">{lbl}</div><div class="value">{val}</div></div>', unsafe_allow_html=True)
             st.markdown("</div>", unsafe_allow_html=True)
 
         with col2:
             st.markdown('<div class="card">', unsafe_allow_html=True)
-            st.markdown('<div style="font-family:\'Playfair Display\',serif;color:#d4a843;margin-bottom:0.8rem">Training Details</div>', unsafe_allow_html=True)
+            st.markdown('<div style="font-family:\'Playfair Display\',serif;color:#f0c040;margin-bottom:0.8rem">Training Details</div>', unsafe_allow_html=True)
             for lbl, val in [("Training Plan", g("Training_Plan")), ("Admission Date", g("Admission_Date")),
                               ("Completion Date", g("Completion_Date")), ("Total Duration", f"{hrs_total:.0f} hrs")]:
                 st.markdown(f'<div class="row"><div class="label">{lbl}</div><div class="value">{val}</div></div>', unsafe_allow_html=True)
@@ -272,13 +370,13 @@ else:
           <div style="background:#21262d;border-radius:20px;height:8px;overflow:hidden;">
             <div style="width:{pct}%;height:100%;background:linear-gradient(90deg,#8a6e2a,#d4a843);border-radius:20px;"></div>
           </div>
-          <div style="font-size:0.72rem;color:#484f58;margin-top:0.3rem">{pct}% complete</div>
+          <div style="font-size:0.82rem;color:#8b9ab0;margin-top:0.3rem">{pct}% complete</div>
         </div>
         """, unsafe_allow_html=True)
 
         st.markdown(f"""
         <div class="card">
-          <div style="font-family:'Playfair Display',serif;color:#d4a843;margin-bottom:0.8rem">Fees Summary</div>
+          <div style="font-family:'Playfair Display',serif;color:#f0c040;margin-bottom:0.8rem">Fees Summary</div>
           <div class="row"><div class="label">Total Fees</div><div class="value">₹{total_fees:,.0f}</div></div>
           <div class="row"><div class="label">Fees Paid</div><div class="value value-green">₹{fees_paid:,.0f}</div></div>
           <div class="row"><div class="label">Fees Due</div><div class="value {'value-red' if fees_due > 0 else 'value-green'}">₹{fees_due:,.0f}</div></div>
@@ -358,7 +456,7 @@ else:
         st.rerun()
 
     st.markdown("""
-    <div style="text-align:center;margin-top:2rem;color:#484f58;font-size:0.75rem;border-top:1px solid #21262d;padding-top:1rem;">
+    <div style="text-align:center;margin-top:2rem;color:#8b9ab0;font-size:0.95rem;border-top:1px solid #21262d;padding-top:1rem;">
       KGR Training Portal · Training by Ms Kavita Guha Roy (Advocate & Technical Consultant) & her team
     </div>
     """, unsafe_allow_html=True)
