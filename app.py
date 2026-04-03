@@ -69,22 +69,39 @@ except Exception:
 # ── Data helpers ─────────────────────────────────────────────────────────────
 @st.cache_data(ttl=60)   # refresh every 60 seconds
 def load_students():
-    df = pd.read_csv(STUDENTS_CSV_URL)
+    try:
+        df = pd.read_csv(STUDENTS_CSV_URL)
+    except Exception as e:
+        raise RuntimeError(
+            f"Could not fetch the sheet. Make sure you used File → Share → "
+            f"Publish to web → CSV (NOT the regular share link). Error: {e}"
+        )
+    # Strip whitespace from column names and values
     df.columns = df.columns.str.strip()
+    # Drop completely empty rows
+    df = df.dropna(how="all")
+    # Debug: show columns if Email missing
+    if "Email" not in df.columns:
+        raise RuntimeError(
+            f"'Email' column not found. Columns in your sheet: {list(df.columns)}\n"
+            f"Make sure Row 1 has exactly: Email, Password, Name, Phone, ..."
+        )
     df["Email"] = df["Email"].astype(str).str.strip().str.lower()
     return df
 
 @st.cache_data(ttl=30)
 def load_attendance():
-    # Attendance sheet has its own CSV URL stored separately, OR
-    # we derive it from the same spreadsheet's second sheet (gid=1)
-    # We use ATTENDANCE_CSV_URL if provided, else skip
     url = st.secrets.get("ATTENDANCE_CSV_URL", "")
     if not url:
         return pd.DataFrame()
-    df = pd.read_csv(url)
-    df.columns = df.columns.str.strip()
-    return df
+    try:
+        df = pd.read_csv(url)
+        if df.empty or len(df.columns) == 0:
+            return pd.DataFrame()
+        df.columns = df.columns.str.strip()
+        return df
+    except Exception:
+        return pd.DataFrame()
 
 def submit_attendance(data: dict) -> bool:
     """POST to Google Apps Script Web App which appends a row."""
@@ -159,6 +176,8 @@ if not st.session_state.logged_in:
                     st.session_state.logged_in = True
                     st.session_state.student = match.iloc[0].to_dict()
                     st.rerun()
+            except RuntimeError as e:
+                st.error(str(e))
             except Exception as e:
                 st.error(f"Could not load data: {e}")
 
