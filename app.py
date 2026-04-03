@@ -304,11 +304,30 @@ else:
 
     try:
         hrs_total = float(g("Duration_hrs", 0))
-        hrs_done  = float(g("Hours_Completed", 0))
-        hrs_left  = max(hrs_total - hrs_done, 0)
-        pct       = int(hrs_done / hrs_total * 100) if hrs_total else 0
     except:
-        hrs_total = hrs_done = hrs_left = pct = 0
+        hrs_total = 0
+
+    # Calculate hours dynamically from attendance records
+    try:
+        df_hrs = load_attendance()
+        if not df_hrs.empty and "Student_Email" in df_hrs.columns:
+            my_att = df_hrs[df_hrs["Student_Email"].astype(str).str.lower() == g("Email").lower()]
+            if not my_att.empty and "Arrival_Time" in my_att.columns and "Departure_Time" in my_att.columns:
+                arr  = pd.to_datetime(my_att["Arrival_Time"],   format="%H:%M:%S", errors="coerce")
+                dep  = pd.to_datetime(my_att["Departure_Time"], format="%H:%M:%S", errors="coerce")
+                # fallback for HH:MM format
+                arr  = arr.fillna(pd.to_datetime(my_att["Arrival_Time"],   format="%H:%M", errors="coerce"))
+                dep  = dep.fillna(pd.to_datetime(my_att["Departure_Time"], format="%H:%M", errors="coerce"))
+                hrs_done = (dep - arr).dt.total_seconds().clip(lower=0).sum() / 3600
+            else:
+                hrs_done = 0
+        else:
+            hrs_done = 0
+    except:
+        hrs_done = 0
+
+    hrs_left = max(hrs_total - hrs_done, 0)
+    pct      = int(hrs_done / hrs_total * 100) if hrs_total else 0
 
     # ── Header ──
     st.markdown(f"""
@@ -361,16 +380,29 @@ else:
                 st.markdown(f'<div class="row"><div class="label">{lbl}</div><div class="value">{val}</div></div>', unsafe_allow_html=True)
             st.markdown("</div>", unsafe_allow_html=True)
 
+        # count sessions for display
+        try:
+            df_s = load_attendance()
+            if not df_s.empty and "Student_Email" in df_s.columns:
+                n_sessions = len(df_s[df_s["Student_Email"].astype(str).str.lower() == g("Email").lower()])
+            else:
+                n_sessions = 0
+        except:
+            n_sessions = 0
+
         st.markdown(f"""
         <div class="card">
-          <div style="display:flex;justify-content:space-between;margin-bottom:0.6rem;">
-            <div><div class="label">Training Progress</div><div class="value">{hrs_done:.0f} / {hrs_total:.0f} hrs</div></div>
-            <div style="text-align:right"><div class="label">Remaining</div><div class="value value-gold">{hrs_left:.0f} hrs</div></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:0.6rem;flex-wrap:wrap;gap:0.5rem;">
+            <div><div class="label">Hours Completed (from attendance)</div><div class="value">{hrs_done:.1f} / {hrs_total:.0f} hrs</div></div>
+            <div style="text-align:right"><div class="label">Hours Remaining</div><div class="value value-gold">{hrs_left:.1f} hrs</div></div>
           </div>
-          <div style="background:#21262d;border-radius:20px;height:8px;overflow:hidden;">
-            <div style="width:{pct}%;height:100%;background:linear-gradient(90deg,#8a6e2a,#d4a843);border-radius:20px;"></div>
+          <div style="background:#2a3140;border-radius:20px;height:10px;overflow:hidden;margin-bottom:0.4rem;">
+            <div style="width:{min(pct,100)}%;height:100%;background:linear-gradient(90deg,#b8902a,#f0c040);border-radius:20px;"></div>
           </div>
-          <div style="font-size:0.82rem;color:#8b9ab0;margin-top:0.3rem">{pct}% complete</div>
+          <div style="display:flex;justify-content:space-between;">
+            <div style="font-size:0.85rem;color:#c9d5e0;">{pct}% complete &nbsp;·&nbsp; {n_sessions} session{'s' if n_sessions != 1 else ''} attended</div>
+            <div style="font-size:0.82rem;color:#8b9ab0;">Auto-calculated from attendance</div>
+          </div>
         </div>
         """, unsafe_allow_html=True)
 
