@@ -14,7 +14,7 @@ import pandas as pd
 import requests
 from datetime import date, datetime
 
-st.set_page_config(page_title="KGR Training Portal", page_icon="🎓", layout="centered")
+st.set_page_config(page_title="Training Attendance Portal", page_icon="🎓", layout="centered")
 
 # ── Dark gold theme ──────────────────────────────────────────────────────────
 st.markdown("""
@@ -225,7 +225,7 @@ if not st.session_state.logged_in:
     st.markdown("""
     <div style="text-align:center;padding:2rem 0 1.5rem">
       <div style="font-size:3rem">🎓</div>
-      <h1 style="margin:0.3rem 0 0.1rem">Attendance Training Portal</h1>
+      <h1 style="margin:0.3rem 0 0.1rem">Training --- Attendance Portal</h1>
       <p style="color:#8b9ab0;font-size:0.9rem;letter-spacing:1.5px;text-transform:uppercase">
         eTendering · DSC · Taxation · IT Skills
       </p>
